@@ -67,6 +67,18 @@ This adds:
 
     <img class="my-thumbnail" src="/images/thumbnail/big_image_200_200.jpg" width="200" height="200" title="This is a thumbnail" alt="Thumbnail">
 
+Note:
+
+It keeps a ratio of width/height
+and doesn't upsize the file, only shrink the file.
+
+* If the original file is 400x300px, and the thumbnail is 100x100px:
+  * Resize it to 133.3x100px, and crop 100x100px from left upper region.
+* If the original file is 300x400px, and the thumbnail is 100x100px:
+  * Resize it to 100x133.3px, and crop 100x100px from left upper region.
+* If the original file is 200x50px, and the thumbnail is 100x100px:
+  * Crop 100x100px from left upper region.
+
 # Cleanup Tips
 
 If there is already a thumbnail, `thumbnail` tag doesn't make it.
