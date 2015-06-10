@@ -1,6 +1,20 @@
 # octopress-thumbnail
 Thumbnail tag for Octopress (Jekyll).
 
+# Requirement
+
+octopress-thumbnail uses ImageMagick.
+
+To install it, in Mac with Homebrew:
+
+    $ brew install imagemagick
+
+In Cygwin with apt-cyg (in Windows):
+
+    $ apt-cyg install ImageMagick
+
+or as you like.
+
 # Installation
 
 Copy **plugins/thumbnail.rb** to your **plugins** directory.
