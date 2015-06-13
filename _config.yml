@@ -1,0 +1,8 @@
+# Thumbnails examples
+thumbnails:
+  - square-thumbnail
+  - small-thumbnail
+square-thumbnail-width: 200
+square-thumbnail-height: 200
+small-thumbnail-width: 120
+small-thumbnail-height: 90
