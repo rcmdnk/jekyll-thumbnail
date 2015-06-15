@@ -66,25 +66,25 @@ module Jekyll
       if @img
         has_thumbnail_class = false
         if @img['class'] and site.config['thumbnails']
-          site.config['thumbnails'].each{ |t|
+          site.config['thumbnails'].each do |t|
             if @img['class'].match(t)
               @img['class'].gsub!(t, t + '-img')
               has_thumbnail_class = true
               break
             end
-          }
+          end
         end
         if (not @img.key?('width') or not @img.key?('height'))
           if not has_thumbnail_class
             raise 'Need width and height or thumbnail class for thumbnail!'
           end
-          site.config['thumbnails'].each{ |t|
+          site.config['thumbnails'].each do |t|
             if @img['class'].match(t)
               @img['width'] = site.config[t + '-width'].to_s
               @img['height'] = site.config[t + '-height'].to_s
               break
             end
-          }
+          end
         end
         @img['src'] = context[@img['src'].split(':')[1]] if @img['src'] =~ /^val:/
         if ! (@img['class'] and @img['class'].include?('noimgpath'))
