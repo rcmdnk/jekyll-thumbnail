@@ -94,7 +94,7 @@ module Jekyll
         end
         thumbnail = @img['src']
         local_file = site.source + @img['src'].sub(site.config['url'], '')
-        if File.exist?(local_file)
+        if File.extname(local_file) != '.gif' and File.exist?(local_file)
           file_path = @img['src'].split('/')
           file_name = file_path[-1]
           thumbnail = file_path[0..-2].join('/') + '/thumbnail/' + file_name.split('.')[0..-2].join('.') + '_' + @img['width'] + '_' + @img['height'] + '.' + file_name.split('.')[-1]
