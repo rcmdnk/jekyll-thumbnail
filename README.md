@@ -1,7 +1,7 @@
 # octopress-thumbnail
 Thumbnail tag for Octopress (Jekyll).
 
-# Requirement
+## Requirement
 
 octopress-thumbnail uses ImageMagick.
 
@@ -15,11 +15,11 @@ In Cygwin with apt-cyg (in Windows):
 
 or as you like.
 
-# Installation
+## Installation
 
 Copy **plugins/thumbnail.rb** to your **plugins** directory.
 
-# Usage
+## Usage
 
 After installing **thumbnail.rb**, you can use `thumbnail` tag in your Markdown files.
 
@@ -79,7 +79,12 @@ and doesn't upsize the file, only shrink the file.
 * If the original file is 200x50px, and the thumbnail is 100x100px:
   * Crop 100x100px from left upper region.
 
-# Cleanup Tips
+Note:
+
+If a `gif` file is given, it just sets `width` and `height` and uses the original image.
+(It is a bit difficult to minify gif automatically.)
+
+## Cleanup Tips
 
 If there is already a thumbnail, `thumbnail` tag doesn't make it.
 
