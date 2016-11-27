@@ -67,6 +67,30 @@ This adds:
 
     <img class="my-thumbnail" src="/images/thumbnail/big_image_200_200.jpg" width="200" height="200" title="This is a thumbnail" alt="Thumbnail">
 
+* Use a variable as source path
+
+You can use a variable for the source path.
+
+Assume you have following settings in **_config.yml**:
+
+    images:
+      - a.jpg
+      - b.jpg
+      - c.jpg
+
+then, you can use them in your post like:
+
+    {% for img in site.images %}
+      {% capture imgpath %}/images/{{img}}{% endcapture %}
+      {% thumbnail val:imgpath 100 100 %}
+    {% endfor %}
+
+This is same as:
+
+    {% thumbnail /images/a.jpg 100 100 %}
+    {% thumbnail /images/b.jpg 100 100 %}
+    {% thumbnail /images/c.jpg 100 100 %}
+
 Note:
 
 It keeps a ratio of width/height
