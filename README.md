@@ -85,6 +85,8 @@ then, you can use them in your post like:
       {% thumbnail val:imgpath 100 100 %}
     {% endfor %}
 
+Put `val:` if you want to use a variable as a path.
+
 This is same as:
 
     {% thumbnail /images/a.jpg 100 100 %}
