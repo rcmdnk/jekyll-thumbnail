@@ -63,41 +63,42 @@ module Jekyll
 
     def render(context)
       site = context.registers[:site]
-      if @img
+      vals = @img.clone
+      if vals
         has_thumbnail_class = false
-        if @img['class'] and site.config['thumbnails']
+        if vals['class'] and site.config['thumbnails']
           site.config['thumbnails'].each do |t|
-            if @img['class'].match(t)
-              @img['class'].gsub!(t, t + '-img')
+            if vals['class'].match(t)
+              vals['class'].gsub!(t, t + '-img')
               has_thumbnail_class = true
               break
             end
           end
         end
-        if (not @img.key?('width') or not @img.key?('height'))
+        if (not vals.key?('width') or not vals.key?('height'))
           if not has_thumbnail_class
             raise 'Need width and height or thumbnail class for thumbnail!'
           end
           site.config['thumbnails'].each do |t|
-            if @img['class'].match(t)
-              @img['width'] = site.config[t + '-width'].to_s
-              @img['height'] = site.config[t + '-height'].to_s
+            if vals['class'].match(t)
+              vals['width'] = site.config[t + '-width'].to_s
+              vals['height'] = site.config[t + '-height'].to_s
               break
             end
           end
         end
-        @img['src'] = context[@img['src'].split(':')[1]] if @img['src'] =~ /^val:/
-        if ! (@img['class'] and @img['class'].include?('noimgpath'))
-          if site.config['imgpath'] and @img['src'] !~ /^(http|#{site.config['imgpath']})/
-            @img['src'] = site.config['imgpath']+@img['src']
+        vals['src'] = context[vals['src'].split(':')[1]] if vals['src'] =~ /^val:/
+        if ! (vals['class'] and vals['class'].include?('noimgpath'))
+          if site.config['imgpath'] and vals['src'] !~ /^(http|#{site.config['imgpath']})/
+            vals['src'] = site.config['imgpath']+vals['src']
           end
         end
-        thumbnail = @img['src']
-        local_file = site.source + @img['src'].sub(site.config['url'], '')
+        thumbnail = vals['src']
+        local_file = site.source + vals['src'].sub(site.config['url'], '')
         if File.extname(local_file) != '.gif' and File.exist?(local_file)
-          file_path = @img['src'].split('/')
+          file_path = vals['src'].split('/')
           file_name = file_path[-1]
-          thumbnail = file_path[0..-2].join('/') + '/thumbnail/' + file_name.split('.')[0..-2].join('.') + '_' + @img['width'] + '_' + @img['height'] + '.' + file_name.split('.')[-1]
+          thumbnail = file_path[0..-2].join('/') + '/thumbnail/' + file_name.split('.')[0..-2].join('.') + '_' + vals['width'] + '_' + vals['height'] + '.' + file_name.split('.')[-1]
           thumbnail_local = site.source + thumbnail.sub(site.config['url'], '')
           if not File.exist?(thumbnail_local)
             thumbnail_path = thumbnail_local.split('/')
@@ -105,20 +106,22 @@ module Jekyll
             size = `identify -format "%w %h" #{local_file}`.strip().split()
             w = size[0].to_f
             h = size[1].to_f
-            if w > @img['width'].to_f and h > @img['height'].to_f
-              if w/@img['width'].to_f > h/@img['height'].to_f
-                `convert -strip -thumbnail 'x#{@img['height']}' -crop '#{@img['width']}x#{@img['height']}+0+0' #{local_file} #{thumbnail_local}`
+            if w > vals['width'].to_f and h > vals['height'].to_f
+              if w/vals['width'].to_f > h/vals['height'].to_f
+                `convert -strip -thumbnail 'x#{vals['height']}' -crop '#{vals['width']}x#{vals['height']}+0+0' #{local_file} #{thumbnail_local}`
               else
-                `convert -strip -thumbnail '#{@img['width']}x' -crop '#{@img['width']}x#{@img['height']}+0+0' #{local_file} #{thumbnail_local}`
+                `convert -strip -thumbnail '#{vals['width']}x' -crop '#{vals['width']}x#{vals['height']}+0+0' #{local_file} #{thumbnail_local}`
               end
             else
-              `convert -strip -crop '#{@img['width']}x#{@img['height']}+0+0' #{local_file} #{thumbnail_local}`
+              `convert -strip -crop '#{vals['width']}x#{vals['height']}+0+0' #{local_file} #{thumbnail_local}`
             end
             site.static_files << Jekyll::StaticFile.new(site, site.source, thumbnail_path[0..-2].join('/').sub(site.source, ''), thumbnail_path[-1])
           end
-          @img['src'] = thumbnail
+          vals['src'] = thumbnail
+        else
+          p "#{local_file} is not found."
         end
-        "<img #{@img.collect {|k,v| "#{k}=\"#{v}\"" if v}.join(" ")}>"
+        "<img #{vals.collect {|k,v| "#{k}=\"#{v}\"" if v}.join(" ")}>"
       else
         "Error processing input, expected syntax: {% thumbnail [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \"title text\" [\"alt text\"]] %}"
       end
