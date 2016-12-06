@@ -119,7 +119,9 @@ module Jekyll
           end
           vals['src'] = thumbnail
         else
-          p "#{local_file} is not found."
+          if File.extname(local_file) != '.gif'
+            p "#{local_file} is not found."
+          end
         end
         "<img #{vals.collect {|k,v| "#{k}=\"#{v}\"" if v}.join(" ")}>"
       else
