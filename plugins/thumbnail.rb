@@ -95,11 +95,17 @@ module Jekyll
         end
         thumbnail = vals['src']
         local_file = site.source + vals['src'].sub(site.config['url'], '')
+        if site.config['baseurl']
+          local_file = local_file.sub(site.config['baseurl'], '')
+        end
         if File.extname(local_file) != '.gif' and File.exist?(local_file)
           file_path = vals['src'].split('/')
           file_name = file_path[-1]
           thumbnail = file_path[0..-2].join('/') + '/thumbnail/' + file_name.split('.')[0..-2].join('.') + '_' + vals['width'] + '_' + vals['height'] + '.' + file_name.split('.')[-1]
           thumbnail_local = site.source + thumbnail.sub(site.config['url'], '')
+          if site.config['baseurl']
+            thumbnail_local = thumbnail_local.sub(site.config['baseurl'], '')
+          end
           if not File.exist?(thumbnail_local)
             thumbnail_path = thumbnail_local.split('/')
             `mkdir -p #{thumbnail_path[0..-2].join('/')}`
