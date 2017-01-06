@@ -131,12 +131,13 @@ module Jekyll
 
     def get_local(file, site)
       if site.config['baseurl']
-        file = file.sub(site.config['baseurl'], '')
+        file.sub!(site.config['baseurl'], '')
       end
-      if site.config['url'] and site.config['root']
-        file = file.sub(site.config['url'] + site.config['root'], '')
-      elsif site.config['url']
-        file = file.sub(site.config['url'], '')
+      if site.config['url']
+        file.sub!(site.config['url'], '')
+      end
+      if site.config['root']
+        file.sub!(site.config['root'], '')
       end
       if file[0] == "/" or site.source == "/"
         file = site.source + file
