@@ -54,9 +54,10 @@ module Jekyll
           @img['title']  = title
           @img['alt']    = alt
         else
-          @img['alt']    = @img['title'].gsub!(/"/, '&#34;') if @img['title']
+          @img['title']  = @img['title'].gsub(/"/, '&#34;') if @img['title']
+          @img['alt']    = @img['title'] if @img['title']
         end
-        @img['class'].gsub!(/"/, '') if @img['class']
+        @img['class'] = @img['class'].gsub(/"/, '') if @img['class']
       end
       super
     end
@@ -69,7 +70,7 @@ module Jekyll
         if vals['class'] and site.config['thumbnails']
           site.config['thumbnails'].each do |t|
             if vals['class'].match(t)
-              vals['class'].gsub!(t, t + '-img')
+              vals['class'] = vals['class'].gsub(t, t + '-img')
               has_thumbnail_class = true
               break
             end
@@ -98,7 +99,8 @@ module Jekyll
         if File.extname(local_file) != '.gif' and File.exist?(local_file)
           file_path = vals['src'].split('/')
           file_name = file_path[-1]
-          thumbnail = file_path[0..-2].join('/') + '/thumbnail/' + file_name.split('.')[0..-2].join('.') + '_' + vals['width'] + '_' + vals['height'] + '.' + file_name.split('.')[-1]
+          file_name_resize = file_name.split('.')[0..-2].join('.') + '_' + vals['width'] + '_' + vals['height'] + '.' + file_name.split('.')[-1]
+          thumbnail = file_path[0..-2].join('/') + '/thumbnail/' + file_name_resize
           thumbnail_local = self.get_local(thumbnail, site)
           if not File.exist?(thumbnail_local)
             thumbnail_path = thumbnail_local.split('/')
@@ -118,6 +120,7 @@ module Jekyll
             site.static_files << Jekyll::StaticFile.new(site, site.source, thumbnail_path[0..-2].join('/').sub(site.source, ''), thumbnail_path[-1])
           end
           vals['src'] = thumbnail
+          vals['alt'] = file_name_resize.split('.')[0..-2].join('.')
         else
           if File.extname(local_file) != '.gif'
             p "#{local_file} is not found."
