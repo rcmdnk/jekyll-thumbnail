@@ -94,12 +94,10 @@ module Jekyll
             vals['src'] = site.config['imgpath']+vals['src']
           end
         end
-        thumbnail = vals['src']
         local_file = self.get_local(vals['src'], site)
         if File.extname(local_file) != '.gif' and File.exist?(local_file)
-          file_path = vals['src'].split('/')
-          file_name = file_path[-1]
-          file_name_resize = file_name.split('.')[0..-2].join('.') + '_' + vals['width'] + '_' + vals['height'] + '.' + file_name.split('.')[-1]
+          file_name = File.basename(vals['src'])
+          file_name_resize = File.basename(file_name, '.*') + '_' + vals['width'] + '_' + vals['height'] + '.' + File.extname(file_name)
           thumbnail = file_path[0..-2].join('/') + '/thumbnail/' + file_name_resize
           thumbnail_local = self.get_local(thumbnail, site)
           if not File.exist?(thumbnail_local)
@@ -125,6 +123,7 @@ module Jekyll
           if File.extname(local_file) != '.gif'
             p "#{local_file} is not found."
           end
+          vals['alt'] = File.basename(vals['src'], '.*')
         end
         "<img #{vals.collect {|k,v| "#{k}=\"#{v}\"" if v}.join(" ")}>"
       else
