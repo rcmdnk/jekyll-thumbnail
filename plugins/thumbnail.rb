@@ -96,13 +96,10 @@ module Jekyll
         end
         local_file = self.get_local(vals['src'], site)
         if File.extname(local_file) != '.gif' and File.exist?(local_file)
-          file_name = File.basename(vals['src'])
-          file_name_resize = File.basename(file_name, '.*') + '_' + vals['width'] + '_' + vals['height'] + '.' + File.extname(file_name)
-          thumbnail = file_path[0..-2].join('/') + '/thumbnail/' + file_name_resize
+          thumbnail = File.dirname(vals['src']) + '/thumbnail/' + File.basename(vals['src'], '.*') + '_' + vals['width'] + '_' + vals['height'] + File.extname(vals['src'])
           thumbnail_local = self.get_local(thumbnail, site)
           if not File.exist?(thumbnail_local)
-            thumbnail_path = thumbnail_local.split('/')
-            `mkdir -p #{thumbnail_path[0..-2].join('/')}`
+            `mkdir -p #{File.dirname(thumbnail_local)}`
             size = `identify -format "%w %h" #{local_file}`.strip().split()
             w = size[0].to_f
             h = size[1].to_f
@@ -115,10 +112,10 @@ module Jekyll
             else
               `convert -strip -crop '#{vals['width']}x#{vals['height']}+0+0' #{local_file} #{thumbnail_local}`
             end
-            site.static_files << Jekyll::StaticFile.new(site, site.source, thumbnail_path[0..-2].join('/').sub(site.source, ''), thumbnail_path[-1])
+            site.static_files << Jekyll::StaticFile.new(site, site.source, File.dirname(thumbnail_local).sub(site.source, ''), File.basename(thumbnail))
           end
           vals['src'] = thumbnail
-          vals['alt'] = file_name_resize.split('.')[0..-2].join('.')
+          vals['alt'] = File.basename(thumbnail, '.*')
         else
           if File.extname(local_file) != '.gif'
             p "#{local_file} is not found."

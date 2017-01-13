@@ -14,7 +14,7 @@
   @extend .square-thumbnail;
   margin: 0 auto 1em auto;
   @include shadow-box;
-  float: center;
+  float: none;
   text-align: center;
   overflow: hidden;
   img {
