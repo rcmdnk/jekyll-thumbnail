@@ -3,17 +3,25 @@
 
 // title thumbnail
 .square-thumbnail{
-  width: 200px;
-  height: 200px;
+  width: 200px + 16px;
+  height: 200px + 16px;
+  img{
+    width: 200px;
+    height: 200px;
+  }
 }
 .square-small-thumbnail {
-  width: 120px;
-  height: 90px;
+  width: 120px + 12px;
+  height: 90px + 12px;
+  img{
+    width: 120px;
+    height: 90px;
+  }
 }
 .title-thumbnail {
   @extend .square-thumbnail;
   margin: 0 auto 1em auto;
-  @include shadow-box;
+  @include shadow-box(#ffffff 8px solid);
   float: none;
   text-align: center;
   overflow: hidden;
@@ -27,7 +35,7 @@
 .title-small-thumbnail {
   @extend .square-small-thumbnail;
   margin: 0 1em 0 0;
-  @include shadow-box;
+  @include shadow-box(#ffffff 6px solid);
   float: left;
   text-align: left;
   overflow: hidden;
@@ -36,17 +44,11 @@
     min-height: 100%;
   }
 }
-@media only screen and (min-width: 450px) {
+@media only screen and (min-width: 768px) {
   .title-thumbnail {
     float: left;
     text-align: left;
     margin: 0 1em 1em 0;
-    img {
-      min-width: 100%;
-      min-height: 100%;
-      max-width: 500%;
-      max-height: 500%;
-    }
   }
 }
 
